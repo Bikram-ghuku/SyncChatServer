@@ -12,8 +12,8 @@ const chats = [
 ]
 
 const getChannels = (req, res) => {
-    const data = jwt.verify(req.body.token, process.env.TOKEN)
-    const channels = chats.filter(chat => chat.members.includes(data.email))
+    const email = req.user.email
+    const channels = chats.filter(chat => chat.members.includes(email))
     res.json(channels)
 }
 
