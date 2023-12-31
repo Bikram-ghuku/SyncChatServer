@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
 var users = []
+var cnt = 1;
 
 const login = async (req, res) => {
     const user = users.find(user => user.email === req.body.email)
@@ -9,7 +10,7 @@ const login = async (req, res) => {
         bcrypt.compare(req.body.pswd, user.pswd).then((valid) => {
             if (valid) {
                 const token = jwt.sign({email: user.email, name: user.name}, process.env?.TOKEN, {expiresIn: '24h'})
-                res.status(200).json({token, name:user.name})
+                res.status(200).json({token, name:user.name, id:user.email})
             } else {
                 res.status(401).json({message: 'Invalid credentials'})
             }
@@ -30,7 +31,8 @@ const register = async (req, res) => {
             const user = {
                 name: req.body.name,
                 email: req.body.email,
-                pswd: hash
+                pswd: hash,
+                id: cnt++
             }
             users.push(user)
             res.status(201).json({message: 'User created successfully'})
