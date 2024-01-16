@@ -4,7 +4,10 @@
   "description": "Backend server for ChatSync",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "nodemon index.js",
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+
   },
   "author": "Bikram Ghuku",
   "license": "ISC",
