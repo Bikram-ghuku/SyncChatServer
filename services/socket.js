@@ -1,4 +1,5 @@
 const { Server } = require('socket.io');
+const sendMsg = require('../controllers/messagesSocket')
 
 class SocketService {
     constructor() {
@@ -20,8 +21,8 @@ class SocketService {
             socket.on('disconnect', () => {
                 console.log('user disconnected', socket.id);
             });
-            socket.on("event:message", (data) => {
-                console.log("New Chat msg: ",data);
+            socket.on("message", (data) => {
+                sendMsg(data)
             });
         });
     }
