@@ -3,7 +3,12 @@ const sendMsg = require('../controllers/messagesSocket')
 
 class SocketService {
     constructor() {
-        this.io = new Server();
+        this.io = new Server({
+            cors:{
+                allowedHeaders: ["*"],
+                origin: "*",
+            }
+        });
     }
     
     init(server) {
@@ -22,6 +27,7 @@ class SocketService {
                 console.log('user disconnected', socket.id);
             });
             socket.on("message", (data) => {
+                io.emit("message", data)
                 sendMsg(data)
             });
         });
