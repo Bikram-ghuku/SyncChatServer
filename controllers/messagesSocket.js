@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const sendMsg = (data) => {
     const token = data.jwt
     const msg = data.msg
-    const currTime = new Date().toLocaleString();
+    const currTime = data.timeStamp;
     const chatId = data.chatId
     try{
         const data = jwt.verify(token, process.env.TOKEN);
