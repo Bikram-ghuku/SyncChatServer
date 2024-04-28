@@ -6,20 +6,31 @@ class DbService{
     }
 
     async addUser(userData){
+        var retData;
         const {user, pswd, email} = userData;
-            this.db.User.create({
-                    data: {
-                        name: user,
-                        passWord: pswd,
-                        email: email
+        try{
+            const data = await this.db.user.create({
+                        data: {
+                            name: user,
+                            passWord: pswd,
+                            email: email
+                        }
                     }
-                }
-            ).then(() => {
-                return true
-            }).catch(() => {
-                return false
-            })
+                )
+            retData = true
+        }catch(err){
+            retData = false
+        }
+        return retData
         
+    }
+
+    async getUser(email){
+        return await this.db.user.findFirst({
+            where:{
+                email: email
+            }
+        })
     }
 }
 
