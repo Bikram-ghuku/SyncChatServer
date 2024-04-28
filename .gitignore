@@ -3,3 +3,4 @@ node_modules
 dataFinal.json
 data
 docker-compose.yml
+prisma/migrations/
