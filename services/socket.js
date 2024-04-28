@@ -1,8 +1,14 @@
 const { Server } = require('socket.io');
+const sendMsg = require('../controllers/messagesSocket')
 
 class SocketService {
     constructor() {
-        this.io = new Server();
+        this.io = new Server({
+            cors:{
+                allowedHeaders: ["*"],
+                origin: "*",
+            }
+        });
     }
     
     init(server) {
@@ -20,8 +26,9 @@ class SocketService {
             socket.on('disconnect', () => {
                 console.log('user disconnected', socket.id);
             });
-            socket.on("event:message", (data) => {
-                console.log("New Chat msg: ",data);
+            socket.on("message", (data) => {
+                io.emit("message", data)
+                sendMsg(data)
             });
         });
     }
