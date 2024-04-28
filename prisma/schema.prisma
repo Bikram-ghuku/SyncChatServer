@@ -16,6 +16,6 @@ datasource db {
 model User{
   userId String @id @default(uuid())
   passWord String
-  email String
-  name String
+  email String @unique
+  name String @unique
 }
