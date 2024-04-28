@@ -7,14 +7,19 @@ class DbService{
 
     async addUser(userData){
         const {user, pswd, email} = userData;
-        await this.db.User.create({
-                data: {
-                    name: user,
-                    passWord: pswd,
-                    email: email
+            this.db.User.create({
+                    data: {
+                        name: user,
+                        passWord: pswd,
+                        email: email
+                    }
                 }
-            }
-        )
+            ).then(() => {
+                return true
+            }).catch(() => {
+                return false
+            })
+        
     }
 }
 
