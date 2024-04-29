@@ -36,9 +36,9 @@ class DbService{
     async createChat(data){
         const user1 = data.user
         const user2 = data.user2
-        const data2 = await this.db.$queryRaw`SELECT DISTINCT a.chat_id, a.sender_id, b.sender_id FROM chats_data a INNER JOIN chats_data b ON a.chat_id = b.chat_id AND a.sender_id != b.sender_id`
+        const data2 = await this.db.$queryRaw`SELECT DISTINCT a.chat_id, a.sender_id, b.sender_id FROM chats_data a INNER JOIN chats_data b ON a.chat_id = b.chat_id AND a.sender_id != b.sender_id WHERE a.sender_id = ${user1.id} AND b.sender_id = ${user2.userId}`
         console.log(data2)
-        if(data2.length > 1) return false
+        if(data2.length > 0) return false
         const userCreate = await this.db.chats.create({
             data: {
                 SenderId: user1.id
@@ -53,6 +53,26 @@ class DbService{
         })
 
         return true
+    }
+
+    async getChats(user){
+        const { id } = user;
+        var retData = []
+        const data = await this.db.$queryRaw`SELECT DISTINCT a.chat_id, a.sender_id, b.sender_id FROM chats_data a INNER JOIN chats_data b ON a.chat_id = b.chat_id AND a.sender_id != b.sender_id WHERE a.sender_id = ${id}`
+        for(var i = 0; i < data.length; i++){
+            const recData = await this.db.user.findFirst({
+                where: {
+                    userId: data[i].sender_id
+                },
+                select: {
+                    name: true,
+                    userId: true,
+                    passWord: false
+                }
+            })
+            retData.push(recData)
+        }
+        return retData
     }
 }
 
