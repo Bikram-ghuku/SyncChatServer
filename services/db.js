@@ -32,6 +32,28 @@ class DbService{
             }
         })
     }
+
+    async createChat(data){
+        const user1 = data.user
+        const user2 = data.user2
+        const data2 = await this.db.$queryRaw`SELECT DISTINCT a.chat_id, a.sender_id, b.sender_id FROM chats_data a INNER JOIN chats_data b ON a.chat_id = b.chat_id AND a.sender_id != b.sender_id`
+        console.log(data2)
+        if(data2.length > 1) return false
+        const userCreate = await this.db.chats.create({
+            data: {
+                SenderId: user1.id
+            }
+        })
+
+        const secUser = await this.db.chats.create({
+            data: {
+                ChatId: userCreate.ChatId,
+                SenderId: user2.userId
+            }
+        })
+
+        return true
+    }
 }
 
 module.exports = {
