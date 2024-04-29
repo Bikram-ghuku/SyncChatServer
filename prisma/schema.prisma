@@ -18,4 +18,11 @@ model User{
   passWord String
   email String @unique
   name String @unique
+  chats Chats[]
+}
+
+model Chats{
+  ChatId String @id @default(uuid())
+  Sender User @relation(fields: [SenderId], references: [userId])
+  SenderId String
 }
