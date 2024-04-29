@@ -14,15 +14,20 @@ datasource db {
 }
 
 model User{
-  userId String @id @default(uuid())
-  passWord String
+  userId String @id @default(uuid()) @map("user_id")
+  passWord String @map("password")
   email String @unique
   name String @unique
   chats Chats[]
+
+  @@map("user_data")
 }
 
 model Chats{
-  ChatId String @id @default(uuid())
-  Sender User @relation(fields: [SenderId], references: [userId])
-  SenderId String
+  ChatId String @default(uuid()) @map("chat_id")
+  sender User @relation(fields: [SenderId], references: [userId])
+  SenderId String @map("sender_id")
+
+  @@id([SenderId, ChatId])
+  @@map("chats_data")
 }
