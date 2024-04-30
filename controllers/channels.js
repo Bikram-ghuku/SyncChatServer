@@ -1,19 +1,9 @@
 const { DbService } = require('../services/db')
 const db = new DbService()
 
-const chats1 = [
-    {
-		"name": ["bikram", "NotUser"],
-		// "url": "https://randomuser.me/api/portraits/women/5.jpg",
-		// "lastMsg": "Hi there",
-		// "lastTime": "8:23"
-	}
-]
-
 const getChannels = async (req, res) => {
     const user = req.body.user
 	db.getChats(user).then((data) => {
-		console.log(data)
     	res.status(200).json(data)
 	})
 }

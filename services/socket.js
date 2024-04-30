@@ -1,5 +1,7 @@
 const { Server } = require('socket.io');
 const sendMsg = require('../controllers/messagesSocket')
+const jwt = require('jsonwebtoken')
+
 
 class SocketService {
     constructor() {
@@ -27,6 +29,8 @@ class SocketService {
                 console.log('user disconnected', socket.id);
             });
             socket.on("message", (data) => {
+                const userData = jwt.verify(data.jwt, process.env.TOKEN);
+                data.name = userData.name
                 io.emit("message", data)
                 sendMsg(data)
             });
