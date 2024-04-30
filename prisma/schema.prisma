@@ -19,7 +19,7 @@ model User{
   email String @unique
   name String @unique
   chats Chats[]
-  url String?
+  url String? @default("https://github.com/shadcn.png")
   @@map("user_data")
 }
 
