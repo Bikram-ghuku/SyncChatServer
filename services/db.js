@@ -60,7 +60,7 @@ class DbService{
         var retData = []
         const data = await this.db.$queryRaw`SELECT DISTINCT a.chat_id, a.sender_id, b.sender_id FROM chats_data a INNER JOIN chats_data b ON a.chat_id = b.chat_id AND a.sender_id != b.sender_id WHERE a.sender_id = ${id}`
         for(var i = 0; i < data.length; i++){
-            const recData = await this.db.user.findFirst({
+            var recData = await this.db.user.findFirst({
                 where: {
                     userId: data[i].sender_id
                 },
@@ -70,8 +70,10 @@ class DbService{
                     passWord: false
                 }
             })
+            recData.chanId = data[i].chat_id
             retData.push(recData)
         }
+        console.log(recData)
         return retData
     }
 }
