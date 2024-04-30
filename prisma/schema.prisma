@@ -19,7 +19,7 @@ model User{
   email String @unique
   name String @unique
   chats Chats[]
-
+  url String?
   @@map("user_data")
 }
 
