@@ -9,7 +9,9 @@ const getChannels = async (req, res) => {
 }
 
 const addChannels = async (req, res) => {
-	const {userId, email, name} = await db.getUser(req.body.email)
+	const xd = await db.getUser(req.body.email)
+	if(xd == null) return res.status(404).json({message: "User not found"})
+	const {userId, email, name} = xd
 	req.body.user2 = {userId, email, name}
 	const ret = await db.createChat(req.body)
 	if (ret) return res.status(201).json({message: 'Creation success'})
