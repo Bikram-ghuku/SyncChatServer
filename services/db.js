@@ -58,7 +58,7 @@ class DbService{
     async getChats(user){
         const { id } = user;
         var retData = []
-        const data = await this.db.$queryRaw`SELECT DISTINCT a.chat_id, a.sender_id, b.sender_id FROM chats_data a INNER JOIN chats_data b ON a.chat_id = b.chat_id AND a.sender_id != b.sender_id WHERE a.sender_id = ${id}`
+        const data = await this.db.$queryRaw`SELECT DISTINCT a.chat_id, a.sender_id, b.sender_id, a.last_msg FROM chats_data a INNER JOIN chats_data b ON a.chat_id = b.chat_id AND a.sender_id != b.sender_id WHERE a.sender_id = ${id}`
         for(var i = 0; i < data.length; i++){
             var recData = await this.db.user.findFirst({
                 where: {
@@ -72,9 +72,9 @@ class DbService{
                 }
             })
             recData.chanId = data[i].chat_id
+            recData.lastMsg = data[i].last_msg
             retData.push(recData)
         }
-        console.log(recData)
         return retData
     }
 
