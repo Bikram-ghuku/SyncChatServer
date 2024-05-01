@@ -20,6 +20,7 @@ model User{
   name String @unique
   chats Chats[]
   url String? @default("https://github.com/shadcn.png")
+  lastOnline DateTime @default(now()) @map("last_online")
   @@map("user_data")
 }
 

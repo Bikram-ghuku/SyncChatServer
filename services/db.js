@@ -68,7 +68,8 @@ class DbService{
                     name: true,
                     userId: true,
                     passWord: false,
-                    url: true
+                    url: true,
+                    lastOnline: true
                 }
             })
             recData.chanId = data[i].chat_id
