@@ -77,6 +77,17 @@ class DbService{
         console.log(recData)
         return retData
     }
+
+    async setLastMsg(chanId, msg){
+        await this.db.chats.updateMany({
+            where: {
+                ChatId: chanId
+            },
+            data:{
+                LastMsg: msg
+            }
+        })
+    }
 }
 
 module.exports = {

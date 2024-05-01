@@ -27,7 +27,7 @@ model Chats{
   ChatId String @default(uuid()) @map("chat_id")
   sender User @relation(fields: [SenderId], references: [userId])
   SenderId String @map("sender_id")
-
+  LastMsg String @map("last_msg") @default("")
   @@id([SenderId, ChatId])
   @@map("chats_data")
 }
