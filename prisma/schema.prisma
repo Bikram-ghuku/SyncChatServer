@@ -32,3 +32,11 @@ model Chats{
   @@id([SenderId, ChatId])
   @@map("chats_data")
 }
+
+model Messages{
+  MsgId String @id @default(uuid()) @map("msg_id")
+  ChanId String @map("chan_id")
+  Message String @map("message") @db.Text
+  senderId String @map("sender_id")
+  TimeStamp DateTime @default(now()) @map("time_stamp")
+}
