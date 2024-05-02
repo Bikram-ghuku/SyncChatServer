@@ -89,6 +89,17 @@ class DbService{
             }
         })
     }
+
+    async setLastOnline(time, userId){
+        await this.db.user.update({
+            where:{
+                userId: userId
+            }, 
+            data:{
+                lastOnline: time
+            }
+        })
+    }
 }
 
 module.exports = {
