@@ -9,10 +9,9 @@ const sendMsg = async (data) => {
     const chatId = data.chatId
     try{
         const data = jwt.verify(token, process.env.TOKEN);
-        console.log(`Received message from ${data.name} on ${chatId}: ${msg} at time ${currTime}`)
         await db.setLastMsg(chatId, msg)
-    }catch{
-        console.log("Socket message receive error")
+    }catch(e){
+        console.log("Socket message receive error: ", e)
     }
 }
 
