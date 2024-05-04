@@ -6,22 +6,24 @@ class DbService{
     }
 
     async addUser(userData){
-        var retData;
-        const {user, pswd, email} = userData;
+        const {user, pswd, email, url} = userData;
+        if(user == undefined || pswd == undefined || email == undefined) return false
         try{
             const data = await this.db.user.create({
                         data: {
                             name: user,
-                            passWord: pswd,
-                            email: email
+                            passWord: pswd.toString(),
+                            email: email,
+                            url: url
                         }
                     }
                 )
-            retData = true
+                
+            return true
         }catch(err){
-            retData = false
+            console.log(err)
+            return false
         }
-        return retData
         
     }
 

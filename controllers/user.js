@@ -46,7 +46,6 @@ const register = async (req, res) => {
 
 const githubRegister = async(req, res) => {
     const uri = `https://github.com/login/oauth/access_token?client_id=${process.env.GH_CLIENT_ID}&client_secret=${process.env.GH_PRIVATE_ID}&code=${req.body.code}`
-    console.log(uri)
     fetch(uri, {
         method: 'POST',
         headers: {
@@ -68,14 +67,26 @@ const githubRegister = async(req, res) => {
             const id = resp.id
             const url = resp.avatar_url
             try{
-                db.addUser({user: name, pswd: id, email: uname}).then((err)=>{})
+                db.addUser({user: name, pswd: id, email: uname, url: url}).then((err)=>{
+                    db.getUser(uname).then((user) => {
+                        if(user && user.passWord == id){
+                            const token = jwt.sign({email: user.email, name: user.name, id: user.userId}, process.env?.TOKEN, {expiresIn: '24h'})
+                            res.status(200).json({token, name:user.name, email:user.email, id: user.userId})
+                        }
+                    })
+                })
+                
             }catch(err){
                 console.log(err)
+                db.getUser(uname).then((user) => {
+                    if(user.passWord == id){
+                        const token = jwt.sign({email: user.email, name: user.name, id: user.userId}, process.env?.TOKEN, {expiresIn: '24h'})
+                        res.status(200).json({token, name:user.name, email:user.email, id: user.userId})
+                    }
+                })
             }
-            db.getUser(uname).then((data)=>{
-                const token = jwt.sign({email: data.email, name: data.name, id: data.userId}, process.env?.TOKEN, {expiresIn: '24h'})
-                res.status(200).json({token, name:data.name, email:data.email, id: data.userId})
-            })
+
+            
         })
     }) 
 
