@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const { DbService } = require('../services/db')
+const { DbService } = require('../services/db');
 
 var users = []
 var cnt = 1;
@@ -44,7 +44,56 @@ const register = async (req, res) => {
     }
 }
 
+const githubRegister = async(req, res) => {
+    const uri = `https://github.com/login/oauth/access_token?client_id=${process.env.GH_CLIENT_ID}&client_secret=${process.env.GH_PRIVATE_ID}&code=${req.body.code}`
+    fetch(uri, {
+        method: 'POST',
+        headers: {
+            "Accept": "application/json"
+        }
+    }).then((response) => {
+        return response.json()
+    }).then((data) => {
+        fetch('https://api.github.com/user', {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + data.access_token
+            }
+        }).then((data) => {
+            return data.json()
+        }).then((resp) => {
+            const name = resp.name
+            const uname = resp.login
+            const id = resp.id
+            const url = resp.avatar_url
+            try{
+                db.addUser({user: name, pswd: id, email: uname, url: url}).then((err)=>{
+                    db.getUser(uname).then((user) => {
+                        if(user && user.passWord == id){
+                            const token = jwt.sign({email: user.email, name: user.name, id: user.userId}, process.env?.TOKEN, {expiresIn: '24h'})
+                            res.status(200).json({token, name:user.name, email:user.email, id: user.userId})
+                        }
+                    })
+                })
+                
+            }catch(err){
+                console.log(err)
+                db.getUser(uname).then((user) => {
+                    if(user.passWord == id){
+                        const token = jwt.sign({email: user.email, name: user.name, id: user.userId}, process.env?.TOKEN, {expiresIn: '24h'})
+                        res.status(200).json({token, name:user.name, email:user.email, id: user.userId})
+                    }
+                })
+            }
+
+            
+        })
+    }) 
+
+}
+
 module.exports = {
     login,
-    register
+    register,
+    githubRegister
 }
