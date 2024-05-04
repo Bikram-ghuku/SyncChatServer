@@ -71,7 +71,7 @@ const githubRegister = async(req, res) => {
                     db.getUser(uname).then((user) => {
                         if(user && user.passWord == id){
                             const token = jwt.sign({email: user.email, name: user.name, id: user.userId}, process.env?.TOKEN, {expiresIn: '24h'})
-                            res.status(200).json({token, name:user.name, email:user.email, id: user.userId})
+                            res.status(200).json({token, name:user.name, email:user.email, id: user.userId, url: url})
                         }
                     })
                 })
@@ -81,7 +81,7 @@ const githubRegister = async(req, res) => {
                 db.getUser(uname).then((user) => {
                     if(user.passWord == id){
                         const token = jwt.sign({email: user.email, name: user.name, id: user.userId}, process.env?.TOKEN, {expiresIn: '24h'})
-                        res.status(200).json({token, name:user.name, email:user.email, id: user.userId})
+                        res.status(200).json({token, name:user.name, email:user.email, id: user.userId, url: url})
                     }
                 })
             }
