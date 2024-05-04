@@ -62,7 +62,7 @@ const githubRegister = async(req, res) => {
         }).then((data) => {
             return data.json()
         }).then((resp) => {
-            const name = resp.name
+            const name = resp.name || resp.login
             const uname = resp.login
             const id = resp.id
             const url = resp.avatar_url
