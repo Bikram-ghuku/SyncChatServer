@@ -101,6 +101,18 @@ class DbService{
             }
         })
     }
+
+    async storeMsg(msgData){
+        const { senderId, chanId, msg, time} = msgData
+        return await this.db.messages.create({
+            data: {
+                senderId: senderId,
+                ChanId: chanId,
+                Message: msg,
+                TimeStamp: time
+            }
+        })
+    }
 }
 
 module.exports = {
