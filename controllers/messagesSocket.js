@@ -5,14 +5,16 @@ const db = new DbService()
 const sendMsg = async (data) => {
     const token = data.jwt
     const msg = data.msg
-    const currTime = data.timeStamp;
+    const currTime = new Date(Date.parse(data.timeStamp));
+    const currTimeISO = currTime.toISOString()
     const chatId = data.chatId
     try{
-        const data = jwt.verify(token, process.env.TOKEN);
-        console.log(`Received message from ${data.name} on ${chatId}: ${msg} at time ${currTime}`)
+        const tokenData = jwt.verify(token, process.env.TOKEN);
         await db.setLastMsg(chatId, msg)
-    }catch{
-        console.log("Socket message receive error")
+        const dataMsgStore = {senderId: tokenData.id, chanId: chatId, msg: msg, time: currTimeISO}
+        await db.storeMsg(dataMsgStore)
+    }catch(e){
+        console.log("Socket message receive error: ", e)
     }
 }
 
