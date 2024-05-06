@@ -113,6 +113,25 @@ class DbService{
             }
         })
     }
+
+    async getMsg(chanId, userId){
+        var res =[]
+        var lineData = {}
+        const x = await this.db.messages.findMany({
+            where:{
+                ChanId: chanId
+            }
+        })
+        for(var i = 0; i < x.length; i++){
+            lineData = {}
+            lineData.id = x[i].MsgId
+            lineData.msgs = x[i].Message
+            lineData.self = x[i].senderId == userId
+            lineData.TimeStamp = x[i].TimeStamp
+            res.push(lineData)
+        }
+        return res
+    }
 }
 
 module.exports = {

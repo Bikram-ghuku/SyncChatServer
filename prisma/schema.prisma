@@ -39,4 +39,6 @@ model Messages{
   Message String @map("message") @db.Text
   senderId String @map("sender_id")
   TimeStamp DateTime @default(now()) @map("time_stamp")
+  IsRead Boolean @default(false) @map("is_read")
+  @@map("messages")
 }
