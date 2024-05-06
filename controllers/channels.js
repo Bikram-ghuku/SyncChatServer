@@ -14,7 +14,7 @@ const addChannels = async (req, res) => {
 	const {userId, email, name} = xd
 	req.body.user2 = {userId, email, name}
 	const ret = await db.createChat(req.body)
-	if (ret) return res.status(201).json({message: 'Creation success'})
+	if (ret[0]) return res.status(201).json({message: 'Creation success', chatId: ret[1]})
 	else return res.status(409).json({message: 'Chat already exists'})
 }
 
