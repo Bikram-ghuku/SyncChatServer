@@ -1,8 +1,15 @@
 const { PrismaClient } = require('@prisma/client')
 
+var db = null
+
 class DbService{
+    db = null
     constructor(){
-        this.db = new PrismaClient()
+        if(db) this.db = db;
+        else{
+            db = new PrismaClient()
+            this.db = db
+        }
     }
 
     async addUser(userData){
@@ -75,6 +82,8 @@ class DbService{
             })
             recData.chanId = data[i].chat_id
             recData.lastMsg = data[i].last_msg
+            var unreadMsg = await this.db.$queryRaw`SELECT COUNT(message) FROM messages WHERE chan_id = ${data[i].chat_id} AND sender_id != ${id} AND is_read = false`
+            recData.noUnread = Number(unreadMsg[0].count)
             retData.push(recData)
         }
         return retData
@@ -128,6 +137,7 @@ class DbService{
             lineData.msgs = x[i].Message
             lineData.self = x[i].senderId == userId
             lineData.TimeStamp = x[i].TimeStamp
+            lineData.isRead = x[i].IsRead
             res.push(lineData)
         }
         return res
