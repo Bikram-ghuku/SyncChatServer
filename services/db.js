@@ -6,8 +6,10 @@ class DbService{
     db = null
     constructor(){
         if(db) this.db = db;
-        db = new PrismaClient()
-        this.db = this.db
+        else{
+            db = new PrismaClient()
+            this.db = db
+        }
     }
 
     async addUser(userData){
