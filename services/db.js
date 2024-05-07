@@ -1,15 +1,9 @@
 const { PrismaClient } = require('@prisma/client')
 
-var db = null
 
 class DbService{
-    db = null
     constructor(){
-        if(db) this.db = db;
-        else{
-            db = new PrismaClient()
-            this.db = db
-        }
+        this.db = new PrismaClient()
     }
 
     async addUser(userData){
@@ -140,6 +134,18 @@ class DbService{
             lineData.isRead = x[i].IsRead
             res.push(lineData)
         }
+        await this.db.messages.updateMany({
+            where: {
+                ChanId: chanId,
+                NOT: {
+                    senderId: userId
+                }
+            },
+            data:{
+                IsRead: true
+            }
+        })
+
         return res
     }
 }
