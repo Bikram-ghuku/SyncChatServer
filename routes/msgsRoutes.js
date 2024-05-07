@@ -1,6 +1,6 @@
 const express = require('express');
 const authenticateToken = require('../middleware/auth');
-const {getMsg} = require('../controllers/messages')
+const {getMsg, readMsg} = require('../controllers/messages')
 
 const router = express.Router()
 

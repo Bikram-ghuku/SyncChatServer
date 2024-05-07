@@ -8,4 +8,11 @@ const getMsg = async (req, res) => {
     res.status(200).json(result)
 }
 
-module.exports = {getMsg}
+const readMsg = async (req, res) => {
+    const cid = req.body.chatId
+    const user = req.body.user.id
+    const resu = await db.readMsg(cid, user)
+    res.status(200).json(resu)
+}
+
+module.exports = { getMsg, readMsg }
