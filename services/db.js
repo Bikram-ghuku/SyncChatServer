@@ -123,6 +123,9 @@ class DbService{
         const x = await this.db.messages.findMany({
             where:{
                 ChanId: chanId
+            },
+            orderBy: {
+                TimeStamp: 'asc'
             }
         })
         for(var i = 0; i < x.length; i++){
