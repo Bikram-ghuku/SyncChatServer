@@ -53,34 +53,40 @@ The client can also be built from source for individual platforms.
 
 1. Clone the repository and cd into it.
 
-```shell
-    git clone https://github.com/Bikram-ghuku/SyncChatServer.git
-    cd ChatSyncWeb
-```
+	```shell
+	    git clone https://github.com/Bikram-ghuku/SyncChatServer.git
+	    cd ChatSyncWeb
+	```
 
 2. Install required modules
 
-```shell
-    npm i
-```
+	```shell
+	    npm i
+	```
 
 3. Setup Docker for PostgreSQL server
-```shell
-  docker compose up
-```
+	```shell
+	  docker compose up
+	```
 
-3. Run the development server
+4. Run the development server
 
-```shell
-    npm run dev
-```
+	```shell
+	    npm run dev
+	```
 
-4. Setup the envrionment
+5. Setup the envrionment
 
-    - Rename the .env.example to .env.local
+    - Rename the .env.example to .env
+    - Set `DATABASE_URL = "postgresql://username:password@localhost:5432/database?schema=public"` if using docker PostgresSQL
     - Fill the required tokens
 
 Visit the application at: http://localhost:8080/
+
+6. Setup the database
+   ```shell
+   npx prisma migrate deploy
+   ```
 
 &nbsp;
 
