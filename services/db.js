@@ -117,7 +117,7 @@ class DbService{
         })
     }
 
-    async getMsg(chanId, userId){
+    async getMsg(chanId, userId, skipMul){
         var res =[]
         var lineData = {}
         const x = await this.db.messages.findMany({
@@ -125,10 +125,12 @@ class DbService{
                 ChanId: chanId
             },
             orderBy: {
-                TimeStamp: 'asc'
-            }
+                TimeStamp: 'desc'
+            },
+            take: 20,
+            skip: skipMul * 20
         })
-        for(var i = 0; i < x.length; i++){
+        for(var i = x.length - 1; i >= 0; i--){
             lineData = {}
             lineData.id = x[i].MsgId
             lineData.msgs = x[i].Message
